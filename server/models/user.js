@@ -28,6 +28,10 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  address: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Address',
+  },
 });
 
 export const User = mongoose.model('User', userSchema);

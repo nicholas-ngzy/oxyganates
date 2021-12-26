@@ -36,20 +36,20 @@ router.get('/', async (req, res) => {
 });
 
 // get products from a category
-router.get('/:categoryId', async (req, res) => {
-  const productList = await Product.findById(req.params.categoryId);
-  if (productList) {
-    res.json(productList);
-  } else {
-    res.status(500).json({ success: false });
-  }
-});
+// router.get('/:id', async (req, res) => {
+//   const productList = await Product.findById(req.params.id);
+//   if (productList) {
+//     res.json(productList);
+//   } else {
+//     res.status(500).json({ success: false });
+//   }
+// });
 
 //get a product
-router.get('/:categoryId/product/:productId', async (req, res) => {
-  const product = await Product.findById(req.params.productId);
+router.get('/:id', async (req, res) => {
+  const product = await Product.findById(req.params.id);
   if (product) {
-    res.status(200).json(user);
+    res.status(200).send(product);
   } else {
     res.status(500).json({ success: false });
   }
