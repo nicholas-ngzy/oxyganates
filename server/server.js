@@ -16,6 +16,8 @@ app.use(express.json());
 app.use(morgan('tiny'));
 app.use(authJwt());
 app.use(errorHandler);
+const __dirname = new URL('.', import.meta.url).pathname;
+app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 
 const api = process.env.API_URL;
 // routes
@@ -23,11 +25,17 @@ import loginRoutes from './routes/login.js';
 import categoryRoutes from './routes/categories.js';
 import productRoutes from './routes/products.js';
 import userRoutes from './routes/users.js';
+import postRoutes from './routes/posts.js';
+import orderRoutes from './routes/orders.js';
+import addressRoutes from './routes/address.js';
 
 app.use(`${api}`, loginRoutes);
 app.use(`${api}/categories`, categoryRoutes);
 app.use(`${api}/products`, productRoutes);
 app.use(`${api}/users`, userRoutes);
+app.use(`${api}/posts`, postRoutes);
+app.use(`${api}/orders`, orderRoutes);
+app.use(`${api}/address`, addressRoutes);
 
 // test api
 app.get(`${api}`, function (req, res) {

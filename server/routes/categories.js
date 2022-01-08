@@ -1,7 +1,6 @@
 import { Category } from '../models/category.js';
 import { Router } from 'express';
 import mongoose from 'mongoose';
-// import Product from '../../client/src/components/Product.js';
 const router = Router();
 
 //create a category
@@ -26,9 +25,9 @@ router.post('/', (req, res) => {
 router.get('/', async (req, res) => {
   const categoryList = await Category.find();
   if (categoryList) {
-    res.json(categoryList);
+    res.status(200).send({ categoryList });
   } else {
-    res.status(500).json({ success: false });
+    res.status(500).send({ success: 'No categories' });
   }
 });
 
@@ -39,16 +38,6 @@ router.get('/:id', async (req, res) => {
     res.status(200).json(category);
   } else {
     res.status(500).json({ success: false });
-  }
-});
-
-// find product by category
-router.get('/:id', async (req, res) => {
-  const category = await Category.findById(req.params.id).populate('product');
-  if (category) {
-    res.status(200).send(category);
-  } else {
-    res.status(500).send({ message: 'Category not found' });
   }
 });
 

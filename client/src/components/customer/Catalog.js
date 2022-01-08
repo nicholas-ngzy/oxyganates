@@ -3,10 +3,8 @@ import axios from 'axios';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/esm/Button';
-import { Link } from 'react-router-dom';
 import NavMenu from '../NavMenu';
+import ProductCard from './ProductCard';
 
 const Catalog = () => {
   const [products, setProducts] = useState([]);
@@ -21,33 +19,34 @@ const Catalog = () => {
       .catch((err) => {
         console.log(err);
       });
+    return () => {
+      setProducts(null);
+    };
   }, []);
 
+  const chunk = (arr, chunkSize = 1, cache = []) => {
+    const tmp = [...arr];
+    if (chunkSize <= 0) return cache;
+    while (tmp.length) cache.push(tmp.splice(0, chunkSize));
+    return cache;
+  };
+  const productsChunks = chunk(products, 3);
+  const rows = productsChunks.map((productChunk, index) => {
+    const productsCols = productChunk.map((product, index) => {
+      return (
+        <Col xs='4' key={product.id}>
+          <ProductCard product={product} />
+        </Col>
+      );
+    });
+    return <Row key={index}>{productsCols}</Row>;
+  });
+
   return (
-    <div className='p-3'>
+    <div>
       <NavMenu />
-      <h1>Catalog</h1>
-      <Container>
-        <Row xs={2} md={4} className='g-4'>
-          {products.map((product) => {
-            return (
-              <Col key={product.id}>
-                <Card>
-                  <Card.Img variant='top' src='{product.image}' />
-                  <Card.Body>
-                    <Card.Title>{product.name}</Card.Title>
-                    <Card.Text>RM {product.price.toFixed(2)}</Card.Text>
-                    <Card.Text>{product.description}</Card.Text>
-                    <Link to={`/products/${product._id}`}>
-                      <Button>View</Button>
-                    </Link>
-                  </Card.Body>
-                </Card>
-              </Col>
-            );
-          })}
-        </Row>
-      </Container>
+      <div className='h1 py-4'>All Products</div>
+      <Container>{rows}</Container>
     </div>
   );
 };

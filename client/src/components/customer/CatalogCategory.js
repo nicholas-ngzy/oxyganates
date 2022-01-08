@@ -3,53 +3,50 @@ import axios from 'axios';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/esm/Button';
-import { Link } from 'react-router-dom';
+import ProductCard from './ProductCard';
 import NavMenu from '../NavMenu';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const CatalogCategory = () => {
   const [products, setProducts] = useState([]);
-  let { id } = useParams();
-
+  const [category, setCategory] = useState();
+  const query = new URLSearchParams(useLocation().search);
+  const id = query.get('categories');
   useEffect(() => {
     axios
-      .get(`http://localhost:6969/api/v1/categories/${id}`)
+      .get(`http://localhost:6969/api/v1/products?categories=${id}`)
       .then((res) => {
         setProducts(res.data.productList);
-        console.log(products);
+        setCategory(res.data.productList[0].category.name);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
+  const chunk = (arr, chunkSize = 1, cache = []) => {
+    const tmp = [...arr];
+    if (chunkSize <= 0) return cache;
+    while (tmp.length) cache.push(tmp.splice(0, chunkSize));
+    return cache;
+  };
+  const productsChunks = chunk(products, 3);
+  const rows = productsChunks.map((productChunk, index) => {
+    const productsCols = productChunk.map((product, index) => {
+      return (
+        <Col xs='4' key={product.id}>
+          <ProductCard product={product} />
+        </Col>
+      );
+    });
+    return <Row key={index}>{productsCols}</Row>;
+  });
+
   return (
-    <div className='p-3'>
+    <div>
       <NavMenu />
-      <h1>Catalog</h1>
-      <Container>
-        <Row xs={2} md={4} className='g-4'>
-          {products.map((product) => {
-            return (
-              <Col key={product.id}>
-                <Card>
-                  <Card.Img variant='top' src='{product.image}' />
-                  <Card.Body>
-                    <Card.Title>{product.name}</Card.Title>
-                    <Card.Text>RM {product.price.toFixed(2)}</Card.Text>
-                    <Card.Text>{product.description}</Card.Text>
-                    <Link to={`/products/${product._id}`}>
-                      <Button>View</Button>
-                    </Link>
-                  </Card.Body>
-                </Card>
-              </Col>
-            );
-          })}
-        </Row>
-      </Container>
+      <div className='h1 py-4'>{category}</div>
+      <Container>{rows}</Container>
     </div>
   );
 };
