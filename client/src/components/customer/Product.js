@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NavMenu from '../NavMenu';
-import { useParams } from 'react-router-dom';
-import Col from 'react-bootstrap/esm/Col';
+import { useNavigate, useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/esm/Row';
 import Container from 'react-bootstrap/Container';
 import Figure from 'react-bootstrap/Figure';
@@ -10,16 +9,17 @@ import Button from 'react-bootstrap/esm/Button';
 import { Form } from 'react-bootstrap';
 
 const Product = () => {
-  const [product, setProduct] = useState([]);
+  const [product, setProduct] = useState({});
   const [count, setCount] = useState(1);
   let { id } = useParams();
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token') || null;
 
   useEffect(() => {
     axios
       .get(`http://localhost:6969/api/v1/products/${id}`)
       .then((res) => {
         setProduct(res.data);
-        console.log(product);
       })
       .catch((err) => {
         console.log(err);
@@ -27,6 +27,18 @@ const Product = () => {
   }, []);
 
   const handleClick = () => {
+    if (token) {
+      console.log(id);
+      let cart = [];
+      if (localStorage.getItem('cart')) {
+        cart = JSON.parse(localStorage.getItem('cart'));
+      }
+      let item = id;
+      cart.push({ id: item, quantity: count });
+      localStorage.setItem('cart', JSON.stringify(cart));
+    } else {
+      navigate('/login');
+    }
     // axios
     //   .post(`http://localhost:6969/api/v1/cart/${id}`)
     //   .then((res) => {
@@ -41,17 +53,15 @@ const Product = () => {
     <div>
       <NavMenu />
       <div className='p-5'>
-        <Container>
-          <Col>
-            <Figure>
-              <Figure.Image src='{product.image}' width={300} height={300} alt={product.name}></Figure.Image>
-            </Figure>
-          </Col>
-          <Col>
-            <Row className='h2'>{product.name}</Row>
-            <Row className='h3'>RM {product.price}</Row>
-            <Row>{product.description}</Row>
-            <Row>
+        <Container style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+          <Figure style={{ alignSelf: 'flex-start' }}>
+            <Figure.Image src={product.image} width={500} height={500} alt={product.name}></Figure.Image>
+          </Figure>
+          <div>
+            <Row className='h2 py-2'>{product.name}</Row>
+            <Row className='h3 py-2'>RM {(Math.round(product.price * 100) / 100).toFixed(2)}</Row>
+            <Row className='py-2'>{product.description}</Row>
+            <Row className='py-2'>
               <Form>
                 <Form.Control
                   type='number'
@@ -61,9 +71,11 @@ const Product = () => {
                   onChange={setCount}
                 ></Form.Control>
               </Form>
-              <Button onClick={handleClick}>Add to cart</Button>
+              <Button className='mx-2' onClick={handleClick}>
+                Add to cart
+              </Button>
             </Row>
-          </Col>
+          </div>
         </Container>
       </div>
     </div>
