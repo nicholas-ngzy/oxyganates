@@ -1,8 +1,8 @@
 import { User } from '../models/user.js';
 import { Router } from 'express';
 import mongoose from 'mongoose';
-const router = Router();
 import bcrypt from 'bcrypt';
+const router = Router();
 
 //update name and email
 router.put('/:id', async (req, res) => {
@@ -47,6 +47,16 @@ router.get('/', async (req, res) => {
     res.json(userList);
   } else {
     res.status(500).json({ success: false });
+  }
+});
+
+//get number of users
+router.get('/count', async (req, res) => {
+  const userCount = await User.countDocuments({});
+  if (userCount) {
+    return res.send({ userCount: userCount });
+  } else {
+    return res.status(500).json({ success: false });
   }
 });
 

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import Container from 'react-bootstrap/Container';
 import '../App.css';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import jwt_decode from 'jwt-decode';
 
 const NavMenu = () => {
@@ -16,19 +16,19 @@ const NavMenu = () => {
     decoded = jwt_decode(token);
   }
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:6969/api/v1/categories`)
-      .then((res) => {
-        setCategories(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    // return () => {
-    //   setCategories(null);
-    // };
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:6969/api/v1/categories`)
+  //     .then((res) => {
+  //       setCategories(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  //   return () => {
+  //     setCategories(null);
+  //   };
+  // }, []);
 
   const checkLoggedIn = () => {
     if (token == null) {
@@ -88,6 +88,9 @@ const NavMenu = () => {
             <NavDropdown.Item href={`/products/?categories=61c42a7ae21866d19b031297`}>Fertilizers</NavDropdown.Item>
             <NavDropdown.Item href={`/products/?categories=61c42a91e21866d19b031298`}>Kits</NavDropdown.Item>
           </NavDropdown>
+          <Nav.Link href={`/cart/?user=${decoded.userId}`} className='mx-3'>
+            Cart
+          </Nav.Link>
           <Nav.Link href='/orders' className='mx-3'>
             Order
           </Nav.Link>

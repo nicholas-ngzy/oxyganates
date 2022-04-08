@@ -85,6 +85,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+//get  number  of products
+router.get('/count', async (req, res) => {
+  const productCount = await Product.countDocuments({});
+  if (productCount) {
+    return res.send({ productCount: productCount });
+  } else {
+    return res.status(500).json({ success: false });
+  }
+});
+
 //get a product
 router.get('/:id', async (req, res) => {
   const product = await Product.findById(req.params.id);

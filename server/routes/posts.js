@@ -22,7 +22,7 @@ router.post('/', (req, res) => {
 
 // get all posts
 router.get('/', async (req, res) => {
-  const postList = await Post.find();
+  const postList = await Post.find().populate('user', 'name');
   if (postList) {
     res.status(200).send({ postList });
   } else {
@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
 
 //get a post
 router.get('/:id', async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id).populate('user', 'name');
   if (post) {
     res.status(200).send(post);
   } else {

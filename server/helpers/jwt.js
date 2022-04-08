@@ -15,8 +15,11 @@ const authJwt = () => {
       { url: /\/api\/v1\/posts(.*)/, methods: ['GET', 'POST', 'OPTIONS'] },
       { url: /\/api\/v1\/address(.*)/, methods: ['GET', 'POST', 'OPTIONS'] },
       { url: /\/api\/v1\/orders(.*)/, methods: ['GET', 'POST', 'OPTIONS'] },
+      // { url: /\/api\/v1\/cart(.*)/, methods: ['GET', 'PUT', 'OPTIONS'] },
       `${api}/login`,
       `${api}/register`,
+      `${api}/posts`,
+      `${api}/cart`,
     ],
   });
 };

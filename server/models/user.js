@@ -32,6 +32,20 @@ const userSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Address',
   },
+  cart: [
+    {
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        min: [1, 'Quantity can not be less then 1.'],
+        required: true,
+      },
+    },
+  ],
 });
 
 export const User = mongoose.model('User', userSchema);
