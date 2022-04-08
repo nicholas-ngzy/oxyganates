@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import axios from 'axios';
 import '../App.css';
-import NavMenu from './NavMenu.js';
+import Form from 'react-bootstrap/Form';
+import { Button, Typography } from '@mui/material';
 
-const Login = ({ setToken }) => {
+export default function Login({ setToken }) {
   const navigate = useNavigate();
   const [form, setForm] = useState({});
   const [errors, setErrors] = useState({});
@@ -64,10 +63,10 @@ const Login = ({ setToken }) => {
 
   return (
     <div className='login-wrapper'>
-      <NavMenu />
-      <h1>Log in</h1>
-      <br />
-      <h4>Please enter email and password</h4>
+      <Typography variant='h3' marginY={3}>
+        Log in
+      </Typography>
+      <Typography variant='h5'>Please enter email and password</Typography>
       <Form onSubmit={handleSubmit} className='my-4'>
         <Form.Group size='lg' controlId='email' className='my-4'>
           <Form.Label>Email</Form.Label>
@@ -92,12 +91,13 @@ const Login = ({ setToken }) => {
           />
           <Form.Control.Feedback type='invalid'>{errors.password}</Form.Control.Feedback>
         </Form.Group>
-        <Button block size='lg' type='submit'>
+        <Button variant='contained' onClick={handleSubmit}>
           Login
         </Button>
       </Form>
-      Don't have an account? <Link to='/register'>Sign up</Link>
+      <Typography variant='h6'>
+        Don't have an account? <Link to='/register'>Sign up</Link>
+      </Typography>
     </div>
   );
-};
-export default Login;
+}

@@ -22,7 +22,7 @@ router.post('/', (req, res) => {
     });
 });
 
-// get all addresss
+// get all address
 router.get('/', async (req, res) => {
   const addressList = await Address.find();
   if (addressList) {

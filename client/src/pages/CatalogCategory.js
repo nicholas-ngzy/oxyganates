@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import ProductCard from '../components/ProductCard';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import NavMenu from '../NavMenu';
-import ProductCard from './ProductCard';
 
-const Catalog = () => {
+const CatalogCategory = () => {
   const [products, setProducts] = useState([]);
-
+  const [category, setCategory] = useState();
+  const query = new URLSearchParams(useLocation().search);
+  const id = query.get('categories');
   useEffect(() => {
     axios
-      .get('http://localhost:6969/api/v1/products')
+      .get(`http://localhost:6969/api/v1/products?categories=${id}`)
       .then((res) => {
         setProducts(res.data.productList);
-        console.log(products);
+        setCategory(res.data.productList[0].category.name);
       })
       .catch((err) => {
         console.log(err);
       });
-    return () => {
-      setProducts(null);
-    };
   }, []);
 
   const chunk = (arr, chunkSize = 1, cache = []) => {
@@ -44,11 +43,10 @@ const Catalog = () => {
 
   return (
     <div>
-      <NavMenu />
-      <div className='h1 py-4'>All Products</div>
+      <div className='h1 py-4 text-center'>{category}</div>
       <Container>{rows}</Container>
     </div>
   );
 };
 
-export default Catalog;
+export default CatalogCategory;

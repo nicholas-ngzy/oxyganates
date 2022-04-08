@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import FormGroup from 'react-bootstrap/esm/FormGroup';
+import axios from 'axios';
 import '../App.css';
-import NavMenu from './NavMenu';
+import Form from 'react-bootstrap/Form';
+import FormGroup from 'react-bootstrap/esm/FormGroup';
+import { Button, Typography } from '@mui/material';
 
-const Register = () => {
+export default function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({});
   const [errors, setErrors] = useState({});
@@ -74,10 +73,10 @@ const Register = () => {
 
   return (
     <div className='register-wrapper'>
-      <NavMenu />
-      <h1>Sign up</h1>
-      <br />
-      <h4>Please enter all details</h4>
+      <Typography variant='h3' marginY={3}>
+        Sign Up
+      </Typography>
+      <Typography variant='h5'>Please enter all details</Typography>
       <Form onSubmit={handleSubmit} className='my-4'>
         <Form.Group size='lg' controlId='email' className='my-4'>
           <Form.Label>Email</Form.Label>
@@ -133,13 +132,13 @@ const Register = () => {
           />
           <Form.Control.Feedback type='invalid'>{errors.phone}</Form.Control.Feedback>
         </Form.Group>
-        <Button block size='lg' type='submit'>
+        <Button variant='contained' onClick={handleSubmit}>
           Register
         </Button>
       </Form>
-      Already have an account?<Link to='/login'> Log in</Link>
+      <Typography variant='h6'>
+        Already have an account?<Link to='/login'> Log in</Link>
+      </Typography>
     </div>
   );
-};
-
-export default Register;
+}

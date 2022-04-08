@@ -31,6 +31,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+//get number of orders
+router.get('/count', async (req, res) => {
+  const orderCount = await Order.countDocuments({});
+  if (orderCount) {
+    return res.send({ orderCount: orderCount });
+  } else {
+    return res.status(500).json({ success: false });
+  }
+});
+
 //get a order
 router.get('/:id', async (req, res) => {
   const order = await Order.findById(req.params.id);

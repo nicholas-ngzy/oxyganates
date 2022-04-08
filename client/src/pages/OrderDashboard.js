@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import NavMenu from '../NavMenu';
 import { DataGrid } from '@mui/x-data-grid';
 import { Stack, Button } from '@mui/material';
+import NotFound from './NotFound';
+import jwt_decode from 'jwt-decode';
 
 const OrderDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -63,62 +64,44 @@ const OrderDashboard = () => {
       });
   };
 
-  return (
-    <div>
-      <NavMenu />
+  let decoded = '';
+  if (localStorage.getItem('token')) {
+    decoded = jwt_decode(localStorage.getItem('token'));
+  }
+  if (decoded.isAdmin) {
+    return (
       <div>
-        <div className='h1 py-4'>Orders</div>
-        <div style={{ height: '80vh', width: '90%', margin: '1px auto' }}>
-          <Stack sx={{ width: '100%', mb: 1 }} direction='row' alignItems='flex-start' columnGap={1}>
-            <Button size='large' variant='outlined' onClick={handleDeleteRow}>
-              Delete order
-            </Button>
-            <Button size='large' variant='outlined' onClick={handleAddRow}>
-              Create order
-            </Button>
-          </Stack>
-          <DataGrid
-            autoHeight
-            rows={orders}
-            columns={columns}
-            getRowId={(row) => row._id}
-            pageSize={10}
-            checkboxSelection
-            disableSelectionOnClick
-            onSelectionModelChange={(ids) => {
-              setSelection(ids);
-              console.log(selection);
-            }}
-          ></DataGrid>
+        <div>
+          <div className='h1 py-4'>Orders</div>
+          <div style={{ height: '80vh', width: '90%', margin: '1px auto' }}>
+            <Stack sx={{ width: '100%', mb: 1 }} direction='row' alignItems='flex-start' columnGap={1}>
+              <Button size='large' variant='outlined' onClick={handleDeleteRow}>
+                Delete order
+              </Button>
+              <Button size='large' variant='outlined' onClick={handleAddRow}>
+                Create order
+              </Button>
+            </Stack>
+            <DataGrid
+              autoHeight
+              rows={orders}
+              columns={columns}
+              getRowId={(row) => row._id}
+              pageSize={10}
+              checkboxSelection
+              disableSelectionOnClick
+              onSelectionModelChange={(ids) => {
+                setSelection(ids);
+                console.log(selection);
+              }}
+            ></DataGrid>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return <NotFound />;
+  }
 };
 
 export default OrderDashboard;
-
-{
-  /* <Table striped bordered>
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Total</th>
-      <th>Status</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    {orders.map((order) => {
-      return (
-        <tr key={order._id}>
-          <td>{order._id}</td>
-          <td>{order.total}</td>
-          <td>{order.status}</td>
-          <td>{order.date}</td>
-        </tr>
-      );
-    })}
-  </tbody>
-</Table> */
-}
