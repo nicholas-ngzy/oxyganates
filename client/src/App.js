@@ -1,4 +1,3 @@
-import './App.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { BrowserRouter } from 'react-router-dom';
 import NavMenu from './components/NavMenu';

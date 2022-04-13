@@ -20,7 +20,6 @@ const userSchema = mongoose.Schema({
   },
   phone: {
     type: String,
-    // required: true,
     trim: true,
     minLength: [10, 'phone number too short'],
   },

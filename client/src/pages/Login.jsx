@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import '../App.css';
-import Form from 'react-bootstrap/Form';
-import { Button, Typography } from '@mui/material';
+import { Button, Container, TextField, Typography } from '@mui/material';
 
 export default function Login({ setToken }) {
   const navigate = useNavigate();
@@ -55,49 +53,56 @@ export default function Login({ setToken }) {
         navigate('/');
       })
       .catch((err) => {
-        if (err.response.status == '400') alert('Wrong credentials');
-        if (err.response.status == '404') alert('User not found');
+        if (err.response.status === 400) alert('Wrong credentials');
+        if (err.response.status === 404) alert('User not found');
         console.log(err);
       });
   };
 
   return (
-    <div className='login-wrapper'>
-      <Typography variant='h3' marginY={3}>
+    <Container sx={{ textAlign: 'center', width: '50%' }}>
+      <Typography variant='h3' marginTop={5}>
         Log in
       </Typography>
-      <Typography variant='h5'>Please enter email and password</Typography>
-      <Form onSubmit={handleSubmit} className='my-4'>
-        <Form.Group size='lg' controlId='email' className='my-4'>
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            autoFocus
-            name='email'
-            type='email'
-            value={form.email}
-            onChange={handleChange}
-            isInvalid={!!errors.email}
-          />
-          <Form.Control.Feedback type='invalid'>{errors.email}</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group size='lg' controlId='password' className='my-4'>
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            name='password'
-            type='password'
-            value={form.password}
-            onChange={handleChange}
-            isInvalid={!!errors.password}
-          />
-          <Form.Control.Feedback type='invalid'>{errors.password}</Form.Control.Feedback>
-        </Form.Group>
-        <Button variant='contained' onClick={handleSubmit}>
-          Login
-        </Button>
-      </Form>
+      <Typography variant='h5' marginY={3}>
+        Please enter email and password
+      </Typography>
+      <TextField
+        autoFocus
+        required
+        id='standard-required'
+        label='Email'
+        name='email'
+        margin='normal'
+        fullWidth
+        inputProps={{ style: { fontSize: 24 } }}
+        inputLabelProps={{ style: { fontSize: 24 } }}
+        value={form.email}
+        onChange={handleChange}
+        error={errors.email}
+        helperText={errors.email || ' '}
+      ></TextField>
+      <TextField
+        required
+        id='standard-password-input'
+        type='password'
+        label='Password'
+        name='password'
+        margin='normal'
+        fullWidth
+        inputProps={{ style: { fontSize: 24 } }}
+        inputLabelProps={{ style: { fontSize: 24 } }}
+        value={form.password}
+        onChange={handleChange}
+        error={errors.password}
+        helperText={errors.password || ' '}
+      ></TextField>
+      <Button variant='contained' size='large' onClick={handleSubmit} sx={{ margin: '1.5rem' }}>
+        Login
+      </Button>
       <Typography variant='h6'>
         Don't have an account? <Link to='/register'>Sign up</Link>
       </Typography>
-    </div>
+    </Container>
   );
 }
