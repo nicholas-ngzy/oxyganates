@@ -6,7 +6,7 @@ import jsonwebtoken from 'jsonwebtoken';
 
 //register customer
 router.post('/register', async (req, res) => {
-  if (!req.body.email || !req.body.name || !req.body.phone) {
+  if (!req.body.email || !req.body.name) {
     return res.status(500).send({ message: 'Fill in all field' });
   }
   if (req.body.password1.length < 8) {
@@ -14,9 +14,6 @@ router.post('/register', async (req, res) => {
   }
   if (req.body.password1 != req.body.password2) {
     return res.status(500).send({ message: 'Password does not match' });
-  }
-  if (req.body.phone.length < 10) {
-    return res.status(500).send({ message: 'Phone number too short' });
   }
   const user = await User.findOne({ email: req.body.email });
   if (user) {
@@ -26,7 +23,6 @@ router.post('/register', async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       passwordHash: bcrypt.hashSync(req.body.password1, 10),
-      phone: req.body.phone,
     });
     user
       .save()
@@ -41,7 +37,7 @@ router.post('/register', async (req, res) => {
 
 //register admin
 router.post('/register/admin', async (req, res) => {
-  if (!req.body.email || !req.body.name || req.body.phone) {
+  if (!req.body.email || !req.body.name) {
     return res.status(400).json({ message: 'Fill in all field' });
   }
   if (req.body.password1.length < 8) {
@@ -49,9 +45,6 @@ router.post('/register/admin', async (req, res) => {
   }
   if (req.body.password1 != req.body.password2) {
     return res.status(400).json({ message: 'Password does not match' });
-  }
-  if (req.body.phone.length < 10) {
-    return res.status(400).json({ message: 'Phone number too short' });
   }
   const user = await User.findOne({ email: req.body.email });
   if (user) {
