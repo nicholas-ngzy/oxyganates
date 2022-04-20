@@ -6,10 +6,9 @@ const router = Router();
 //create a order
 router.post('/', (req, res) => {
   const order = new Order({
-    total: req.body.total,
-    status: req.body.status,
     user: req.body.user,
-    address: req.body.address,
+    items: req.body.items,
+    total: req.body.total,
   });
   order
     .save()
@@ -23,11 +22,15 @@ router.post('/', (req, res) => {
 
 // get all orders
 router.get('/', async (req, res) => {
-  const orderList = await Order.find().populate('user');
+  let filter = {};
+  if (req.query.user) {
+    filter = { user: req.query.user.split(',') };
+  }
+  const orderList = await Order.find(filter).populate('user', 'name').populate('items.product', 'name price').exec();
   if (orderList) {
     res.status(200).send({ orderList });
   } else {
-    res.status(500).send({ message: 'No orders' });
+    res.status(500).send({ message: 'No order' });
   }
 });
 
