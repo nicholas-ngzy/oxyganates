@@ -3,7 +3,7 @@ import { Router } from 'express';
 import mongoose from 'mongoose';
 const router = Router();
 
-//create a order
+// create an order
 router.post('/', (req, res) => {
   const order = new Order({
     user: req.body.user,
@@ -13,10 +13,10 @@ router.post('/', (req, res) => {
   order
     .save()
     .then((createdOrder) => {
-      res.status(201).send(createdOrder);
+      return res.status(201).send(createdOrder);
     })
     .catch((err) => {
-      res.status(500).send({ message: err });
+      return res.status(500).send({ message: err });
     });
 });
 
@@ -28,13 +28,13 @@ router.get('/', async (req, res) => {
   }
   const orderList = await Order.find(filter).populate('user', 'name').populate('items.product', 'name price').exec();
   if (orderList) {
-    res.status(200).send({ orderList });
+    return res.status(200).send({ orderList });
   } else {
-    res.status(500).send({ message: 'No order' });
+    return res.status(500).send({ message: 'No order' });
   }
 });
 
-//get number of orders
+// get number of orders
 router.get('/count', async (req, res) => {
   const orderCount = await Order.countDocuments({});
   if (orderCount) {
@@ -44,14 +44,41 @@ router.get('/count', async (req, res) => {
   }
 });
 
-//get a order
+// get a order
 router.get('/:id', async (req, res) => {
   const order = await Order.findById(req.params.id);
   if (order) {
-    res.status(200).send(order);
+    return res.status(200).send(order);
   } else {
-    res.status(500).send({ success: false });
+    return res.status(500).send({ success: false });
   }
 });
 
+// update order
+router.patch('/:id', async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(404).send({ message: 'Order id is invalid' });
+  }
+  const updatedOrder = await Order.findByIdAndUpdate(req.params.id, req.body);
+  if (updatedOrder) {
+    return res.status(200).json({ success: true, message: 'Order updated' });
+  } else {
+    return res.status(404).json({ success: false, message: 'Order id not found' });
+  }
+});
+
+// delete order
+router.delete('/:id', (req, res) => {
+  Order.findByIdAndDelete(req.params.id)
+    .then((order) => {
+      if (order) {
+        return res.status(200).json({ success: true, message: 'Order deleted' });
+      } else {
+        return res.status(404).json({ success: false, message: 'Order not found' });
+      }
+    })
+    .catch((err) => {
+      return res.json({ success: false, error: err });
+    });
+});
 export default router;
