@@ -28,7 +28,6 @@ import userRoutes from './routes/users.js';
 import cartRoutes from './routes/cart.js';
 import postRoutes from './routes/posts.js';
 import orderRoutes from './routes/orders.js';
-import addressRoutes from './routes/address.js';
 
 app.use(`${api}`, loginRoutes);
 app.use(`${api}/categories`, categoryRoutes);
@@ -37,7 +36,6 @@ app.use(`${api}/users`, userRoutes);
 app.use(`${api}/cart`, cartRoutes);
 app.use(`${api}/posts`, postRoutes);
 app.use(`${api}/orders`, orderRoutes);
-app.use(`${api}/address`, addressRoutes);
 
 // test api
 app.get(`${api}`, function (req, res) {
