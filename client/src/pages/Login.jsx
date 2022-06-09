@@ -1,24 +1,20 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Container, TextField, Typography } from '@mui/material';
+import jwtDecode from 'jwt-decode';
+import TokenContext from '../context/TokenProvider';
 
-export default function Login({ setToken }) {
+export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({});
   const [errors, setErrors] = useState({});
+  const { setToken, setUser } = useContext(TokenContext);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({
-      ...form, //spread operator
-      [name]: value,
-    });
-    // clear error
-    setErrors({
-      ...errors,
-      [name]: null,
-    });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm({ ...form, [name]: value });
+    setErrors({ ...errors, [name]: null });
   };
 
   const findError = () => {
@@ -32,13 +28,12 @@ export default function Login({ setToken }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const newErrors = findError();
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-    } else {
+    if (Object.keys(newErrors).length > 0) setErrors(newErrors);
+    else {
       try {
         login();
-      } catch (e) {
-        console.log(e.message);
+      } catch (err) {
+        console.log(err.message);
       }
     }
   };
@@ -47,56 +42,49 @@ export default function Login({ setToken }) {
     axios
       .post('http://localhost:6969/api/v1/login', form)
       .then((res) => {
-        alert(res.data.message);
+        setUser(jwtDecode(res.data.token));
         setToken(res.data.token);
-        localStorage.setItem('token', res.data.token);
-        navigate('/');
+        sessionStorage.setItem('token', res.data.token);
+        jwtDecode(res.data.token).isAdmin ? navigate('/admin') : navigate('/');
       })
       .catch((err) => {
-        if (err.response.status === 400) alert('Wrong credentials');
-        if (err.response.status === 404) alert('User not found');
-        console.log(err);
+        if (err.response.status === 401) alert('Invalid credentials');
+        else alert(err);
       });
   };
 
   return (
     <Container sx={{ textAlign: 'center', width: '50%' }}>
-      <Typography variant='h3' marginTop={5}>
+      <Typography variant='h4' marginTop={4}>
         Log in
       </Typography>
-      <Typography variant='h5' marginY={3}>
+      <Typography variant='h6' marginY={1}>
         Please enter email and password
       </Typography>
       <TextField
         autoFocus
         required
-        id='standard-required'
         label='Email'
         name='email'
         margin='normal'
         fullWidth
-        inputProps={{ style: { fontSize: 24 } }}
-        inputLabelProps={{ style: { fontSize: 24 } }}
         value={form.email}
         onChange={handleChange}
         error={errors.email}
         helperText={errors.email || ' '}
-      ></TextField>
+      />
       <TextField
         required
-        id='standard-password-input'
         type='password'
         label='Password'
         name='password'
         margin='normal'
         fullWidth
-        inputProps={{ style: { fontSize: 24 } }}
-        inputLabelProps={{ style: { fontSize: 24 } }}
         value={form.password}
         onChange={handleChange}
         error={errors.password}
         helperText={errors.password || ' '}
-      ></TextField>
+      />
       <Button variant='contained' size='large' onClick={handleSubmit} sx={{ margin: '1.5rem' }}>
         Login
       </Button>
