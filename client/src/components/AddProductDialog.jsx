@@ -1,23 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem } from '@mui/material';
+import TokenContext from '../context/TokenProvider';
 
 export default function AddProductDialog(props) {
   const [form, setForm] = useState({});
   const [errors, setErrors] = useState({});
-  const token = localStorage.getItem('token');
+  const { token } = useContext(TokenContext);
   const config = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
-    setErrors({
-      ...errors,
-      [name]: null,
-    });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm({ ...form, [name]: value });
+    setErrors({ ...errors, [name]: null });
   };
 
   const findError = () => {
@@ -27,18 +22,19 @@ export default function AddProductDialog(props) {
     if (!name || name === '') newErrors.name = 'Required field';
     if (!description || description === '') newErrors.description = 'Required field';
     if (!price || price === '') newErrors.price = 'Required field';
+    else if (isNaN(price) || price <= 0) newErrors.price = 'Positive number only';
     if (!quantity || quantity === '') newErrors.quantity = 'Required field';
+    else if (!Number.isInteger(Number(quantity)) || quantity <= 0) newErrors.quantity = 'Positive integer only';
     return newErrors;
   };
 
-  const handleSubmit = () => {
-    const json = JSON.stringify(form);
+  const handleSubmit = (event) => {
+    event.preventDefault();
     const newErrors = findError();
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-    } else {
+    if (Object.keys(newErrors).length > 0) setErrors(newErrors);
+    else {
       axios
-        .post(`http://localhost:6969/api/v1/products`, json, config)
+        .post(`http://localhost:6969/api/v1/products`, form, config)
         .then((res) => window.location.reload())
         .catch((err) => console.log(err));
     }
@@ -54,7 +50,6 @@ export default function AddProductDialog(props) {
           label='Category'
           name='category'
           fullWidth
-          margin='normal'
           value={form.category}
           onChange={handleChange}
           error={errors.category}
@@ -69,8 +64,6 @@ export default function AddProductDialog(props) {
           label='Name'
           name='name'
           fullWidth
-          margin='normal'
-          inputProps={{ style: { fontSize: 24 } }}
           value={form.name}
           onChange={handleChange}
           error={errors.name}
@@ -81,8 +74,6 @@ export default function AddProductDialog(props) {
           label='Description'
           name='description'
           fullWidth
-          margin='normal'
-          inputProps={{ style: { fontSize: 24 } }}
           value={form.description}
           onChange={handleChange}
           error={errors.description}
@@ -93,9 +84,7 @@ export default function AddProductDialog(props) {
           label='Price'
           name='price'
           fullWidth
-          margin='normal'
           inputProps={{
-            style: { fontSize: 24 },
             inputMode: 'decimal',
             pattern: '([0-9]+)?[,\\.]?[0-9]*',
             inputProps: {
@@ -112,9 +101,7 @@ export default function AddProductDialog(props) {
           label='Quantity'
           name='quantity'
           fullWidth
-          margin='normal'
           inputProps={{
-            style: { fontSize: 24 },
             inputMode: 'numeric',
             pattern: '[0-9]*',
             inputProps: {

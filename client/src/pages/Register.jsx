@@ -8,17 +8,10 @@ export default function Register() {
   const [form, setForm] = useState({});
   const [errors, setErrors] = useState({});
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
-    // clear error
-    setErrors({
-      ...errors,
-      [name]: null,
-    });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm({ ...form, [name]: value });
+    setErrors({ ...errors, [name]: null }); //clear errors
   };
 
   const findError = () => {
@@ -41,13 +34,12 @@ export default function Register() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const newErrors = findError();
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-    } else {
+    if (Object.keys(newErrors).length > 0) setErrors(newErrors);
+    else {
       try {
         register();
-      } catch (e) {
-        console.log(e.message);
+      } catch (err) {
+        console.log(err.message);
       }
     }
   };
@@ -61,76 +53,61 @@ export default function Register() {
       })
       .catch((err) => {
         if (err.response.status === 403) alert('Email already exist');
+        else alert(err);
       });
   };
 
   return (
     <Container sx={{ textAlign: 'center', width: '50%' }}>
-      <Typography variant='h3' marginTop={5}>
+      <Typography variant='h4' marginTop={4}>
         Sign Up
       </Typography>
-      <Typography variant='h5' marginY={3}>
+      <Typography variant='h6' marginTop={1} marginBottom={5}>
         Please enter all details
       </Typography>
       <TextField
         autoFocus
         required
-        id='standard-required'
         label='Email'
         name='email'
-        margin='normal'
         fullWidth
-        inputProps={{ style: { fontSize: 24 } }}
-        inputLabelProps={{ style: { fontSize: 24 } }}
         value={form.email}
         onChange={handleChange}
         error={errors.email}
         helperText={errors.email || ' '}
-      ></TextField>
+      />
       <TextField
         required
-        id='standard-required'
         label='Name'
         name='name'
-        margin='normal'
         fullWidth
-        inputProps={{ style: { fontSize: 24 } }}
-        inputLabelProps={{ style: { fontSize: 24 } }}
         value={form.name}
         onChange={handleChange}
         error={errors.name}
         helperText={errors.name || ' '}
-      ></TextField>
+      />
       <TextField
         required
-        id='standard-password-input'
         type='password'
         label='Password'
         name='password1'
-        margin='normal'
         fullWidth
-        inputProps={{ style: { fontSize: 24 } }}
-        inputLabelProps={{ style: { fontSize: 24 } }}
         value={form.password1}
         onChange={handleChange}
         error={errors.password1}
         helperText={errors.password1 || ' '}
-      ></TextField>
+      />
       <TextField
         required
-        id='standard-password-input'
         type='password'
         label='Confirm password'
         name='password2'
-        margin='normal'
         fullWidth
-        inputProps={{ style: { fontSize: 24 } }}
-        inputLabelProps={{ style: { fontSize: 24 } }}
         value={form.password2}
         onChange={handleChange}
         error={errors.password2}
         helperText={errors.password2 || ' '}
-      ></TextField>
+      />
       <Button variant='contained' size='large' onClick={handleSubmit} sx={{ margin: '1.5rem' }}>
         Register
       </Button>
