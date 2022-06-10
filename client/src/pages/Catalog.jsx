@@ -42,7 +42,7 @@ export default function Catalog() {
       >
         {products.map((product) => (
           <Grid item key={product._id} md={3} xs={6}>
-            <Card sx={{ maxWidth: 300 }}>
+            <Card sx={{ maxWidth: 300, borderRadius: '2rem' }}>
               <CardActionArea onClick={() => navigate(`/products/${product._id}`)}>
                 <CardMedia component='img' height='250' image={product.image} alt={product.name} />
                 <CardContent>
