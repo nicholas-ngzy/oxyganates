@@ -1,27 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Card, CardContent, CardHeader, Chip, Container, Grid, Typography } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import TokenContext from '../context/TokenProvider';
 
 export default function Order() {
   const [orders, setOrders] = useState([]);
-  const user = new URLSearchParams(useLocation().search).get('user');
+  const { user } = useContext(TokenContext);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:6969/api/v1/orders?user=${user}`)
-      .then((res) => {
-        console.log(res.data);
-        setOrders(res.data.orderList);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .get(`http://localhost:6969/api/v1/orders?user=${user.userId}`)
+      .then((res) => setOrders(res.data))
+      .catch((err) => console.log(err));
   }, [user]);
 
   return (
     <Container>
-      <Typography variant='h3' my={3} textAlign='center'>
+      <Typography variant='h4' py={3} textAlign='center'>
         Order
       </Typography>
       {orders.length === 0 ? (
