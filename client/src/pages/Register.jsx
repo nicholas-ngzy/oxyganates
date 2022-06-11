@@ -5,7 +5,7 @@ import { Button, Container, TextField, Typography } from '@mui/material';
 
 export default function Register() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({ email: '', password1: '', name: '', password2: '' });
   const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
