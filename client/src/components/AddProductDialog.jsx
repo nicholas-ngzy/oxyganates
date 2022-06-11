@@ -4,7 +4,7 @@ import { Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, M
 import TokenContext from '../context/TokenProvider';
 
 export default function AddProductDialog(props) {
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({ name: '', description: '', price: '', quantity: '', category: '' });
   const [errors, setErrors] = useState({});
   const { token } = useContext(TokenContext);
   const config = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } };

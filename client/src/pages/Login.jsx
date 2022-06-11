@@ -7,7 +7,7 @@ import TokenContext from '../context/TokenProvider';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const { setToken, setUser } = useContext(TokenContext);
 
