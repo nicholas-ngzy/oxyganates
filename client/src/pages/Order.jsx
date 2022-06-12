@@ -2,19 +2,21 @@ import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Card, CardContent, CardHeader, Chip, Container, Grid, Typography } from '@mui/material';
 import TokenContext from '../context/TokenProvider';
+import NotFound from './NotFound';
 
 export default function Order() {
   const [orders, setOrders] = useState([]);
   const { user } = useContext(TokenContext);
 
   useEffect(() => {
+    if (user.userId === undefined) return;
     axios
       .get(`http://localhost:6969/api/v1/orders?user=${user.userId}`)
       .then((res) => setOrders(res.data))
       .catch((err) => console.log(err));
   }, [user]);
 
-  return (
+  return Object.keys(user).length > 0 ? (
     <Container>
       <Typography variant='h4' py={3} textAlign='center'>
         Order
@@ -77,6 +79,8 @@ export default function Order() {
         </Container>
       )}
     </Container>
+  ) : (
+    <NotFound />
   );
 }
 
