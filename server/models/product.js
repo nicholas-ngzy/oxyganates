@@ -33,4 +33,13 @@ const productSchema = new mongoose.Schema({
 // productSchema.method.getPrice = () => {
 //   return price.toFixed(2);
 // };
+
+productSchema.virtual('id').get(function () {
+  return this._id.toHexString();
+});
+
+productSchema.set('toJSON', {
+  virtuals: true,
+});
+
 export const Product = mongoose.model('Product', productSchema);
