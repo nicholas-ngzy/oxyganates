@@ -47,8 +47,8 @@ export default function NavMenu() {
 
   const userMenuItems = [
     { text: 'Products', icon: <GrassIcon />, path: '/' },
-    { text: 'Orders', icon: <ReceiptIcon />, path: `/orders/?user=${user.userId}` },
     { text: 'Cart', icon: <ShoppingCartIcon />, path: `/cart/?user=${user.userId}` },
+    { text: 'Orders', icon: <ReceiptIcon />, path: `/orders/?user=${user.userId}` },
     { text: 'Forum', icon: <ForumIcon />, path: '/posts' },
     { text: 'Logout', icon: <LogoutIcon />, path: '/', onClick: () => logout() },
   ];
@@ -57,6 +57,7 @@ export default function NavMenu() {
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin' },
     { text: 'Products', icon: <GrassIcon />, path: '/admin/products' },
     { text: 'Orders', icon: <ReceiptIcon />, path: '/admin/orders' },
+    { text: 'Forum', icon: <ForumIcon />, path: '/posts' },
     { text: 'Logout', icon: <LogoutIcon />, path: '/', onClick: () => logout() },
   ];
 

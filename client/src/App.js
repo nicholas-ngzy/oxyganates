@@ -1,14 +1,12 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { BrowserRouter } from 'react-router-dom';
-import NavMenu from './components/NavMenu';
 import Pages from './pages/Pages';
+import { BrowserRouter } from 'react-router-dom';
 
 export default function App() {
   return (
     <div className='App'>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          <NavMenu />
           <Pages />
         </BrowserRouter>
       </ThemeProvider>
