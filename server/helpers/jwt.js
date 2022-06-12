@@ -10,15 +10,12 @@ const authJwt = () => {
   }).unless({
     path: [
       { url: /\/public\/uploads(.*)/, methods: ['GET', 'OPTIONS'] },
-      { url: /\/api\/v1\/products(.*)/, methods: ['GET', 'OPTIONS'] },
+      { url: /\/api\/v1\/products(.*)/, methods: ['GET', 'PUT', 'OPTIONS'] },
       { url: /\/api\/v1\/categories(.*)/, methods: ['GET', 'OPTIONS'] },
-      { url: /\/api\/v1\/posts(.*)/, methods: ['GET', 'POST', 'OPTIONS'] },
-      { url: /\/api\/v1\/address(.*)/, methods: ['GET', 'POST', 'OPTIONS'] },
+      { url: /\/api\/v1\/posts(.*)/ },
       { url: /\/api\/v1\/orders(.*)/, methods: ['GET', 'POST', 'OPTIONS'] },
-      // { url: /\/api\/v1\/cart(.*)/, methods: ['GET', 'PUT', 'OPTIONS'] },
       `${api}/login`,
       `${api}/register`,
-      `${api}/posts`,
       `${api}/cart`,
     ],
   });
