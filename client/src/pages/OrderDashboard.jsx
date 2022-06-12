@@ -39,7 +39,12 @@ export default function OrderDashboard() {
       flex: 1,
       editable: true,
     },
-    { field: 'total', headerName: 'Order total', flex: 0.5 },
+    {
+      field: 'total',
+      headerName: 'Order total',
+      flex: 0.5,
+      valueFormatter: (params) => Number(params.value).toFixed(2),
+    },
     {
       field: 'actions',
       headerName: 'Details',

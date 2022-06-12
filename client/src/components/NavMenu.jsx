@@ -97,7 +97,7 @@ export default function NavMenu() {
             <NavList />
           </Drawer>
           <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-            Oxyganates
+            MEA Aquaponics
           </Typography>
         </Toolbar>
       </AppBar>

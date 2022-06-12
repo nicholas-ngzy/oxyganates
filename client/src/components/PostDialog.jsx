@@ -48,7 +48,7 @@ export default function PostDialog({ open, handleClose, title, content, userId, 
 
   return (
     <Dialog maxWidth='md' fullWidth open={open} onClose={handleClose}>
-      <DialogTitle>Edit post</DialogTitle>
+      {postId ? <DialogTitle>Edit post</DialogTitle> : <DialogTitle>Create post</DialogTitle>}
       <DialogContent>
         <TextField
           required
