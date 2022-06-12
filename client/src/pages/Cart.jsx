@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Button, Card, CardActions, CardContent, CardHeader, Container, Grid, Typography } from '@mui/material';
 import Paypal from '../components/Paypal';
 import TokenContext from '../context/TokenProvider';
+import NotFound from './NotFound';
 
 export default function Cart() {
   const [cart, setCart] = useState([]);
@@ -10,6 +11,7 @@ export default function Cart() {
   let subtotal = 0;
 
   useEffect(() => {
+    if (user.userId === undefined) return;
     axios
       .get(`http://localhost:6969/api/v1/cart?user=${user.userId}`)
       .then((res) => setCart(res.data.cart))
@@ -23,7 +25,7 @@ export default function Cart() {
       .catch((err) => console.log(err));
   };
 
-  return (
+  return Object.keys(user).length > 0 ? (
     <Container>
       <Typography variant='h4' py={3} textAlign='center'>
         Cart
@@ -78,5 +80,7 @@ export default function Cart() {
         )}
       </Card>
     </Container>
+  ) : (
+    <NotFound />
   );
 }

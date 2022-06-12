@@ -132,6 +132,7 @@ export default function Post() {
             setComment={setComment}
             setOpenCommentDialog={setOpenCommentDialog}
             handleDeleteComment={handleDeleteComment}
+            key={comment._id}
           />
         );
       })}

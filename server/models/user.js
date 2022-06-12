@@ -27,10 +27,6 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  address: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Address',
-  },
   cart: [
     {
       product: {
@@ -45,6 +41,14 @@ const userSchema = mongoose.Schema({
       },
     },
   ],
+});
+
+userSchema.virtual('id').get(function () {
+  return this._id.toHexString();
+});
+
+userSchema.set('toJSON', {
+  virtuals: true,
 });
 
 export const User = mongoose.model('User', userSchema);
