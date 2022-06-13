@@ -46,7 +46,7 @@ export default function Register() {
 
   const register = () => {
     axios
-      .post('http://localhost:6969/api/v1/register', form)
+      .post(`${process.env.REACT_APP_API_URL}/register`, form)
       .then((res) => {
         alert(res.data.message);
         navigate('/login');

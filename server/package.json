@@ -5,10 +5,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "server": "nodemon server/server.js",
-    "client": "cd client && npm run start",
+    "start": "node server.js",
+    "start:dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "server": "nodemon server.js",
+    "client": "cd ../client && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "16.x",
+    "npm": "7.21.0"
   },
   "keywords": [],
   "author": "",
@@ -23,8 +28,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.2",
     "morgan": "^1.10.0",
-    "multer": "^1.4.4",
-    "nodemon": "^2.0.15",
-    "recharts": "^2.1.10"
+    "nodemon": "^2.0.15"
   }
 }

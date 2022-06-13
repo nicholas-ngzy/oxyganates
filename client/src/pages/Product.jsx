@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -25,12 +25,12 @@ export default function Product() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:6969/api/v1/products/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/products/${id}`)
       .then((res) => {
         setItem(res.data);
         const category = res.data.category.id;
         axios
-          .get(`http://localhost:6969/api/v1/products?categories=${category}`)
+          .get(`${process.env.REACT_APP_API_URL}/products?categories=${category}`)
           .then((res) => {
             for (let i = 0; i < res.data.length; i++) {
               if (res.data[i].id === id) res.data.splice(i, 1);
@@ -60,7 +60,7 @@ export default function Product() {
       else {
         const config = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } };
         axios
-          .patch(`http://localhost:6969/api/v1/cart?user=${user.userId}`, form, config)
+          .patch(`${process.env.REACT_APP_API_URL}/cart?user=${user.userId}`, form, config)
           .then((res) => alert(res.data.message))
           .catch((err) => console.log(err));
       }

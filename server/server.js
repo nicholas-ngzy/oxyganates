@@ -3,6 +3,7 @@ const app = express();
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import path from 'path';
 import 'dotenv/config';
 import authJwt from './helpers/jwt.js';
 import errorHandler from './helpers/errorhandler.js';
@@ -16,8 +17,6 @@ app.use(express.json());
 app.use(morgan('tiny'));
 app.use(authJwt());
 app.use(errorHandler);
-const __dirname = new URL('.', import.meta.url).pathname;
-app.use('/public/uploads', express.static(__dirname + '/public/uploads'));
 
 const api = process.env.API_URL;
 // routes
@@ -37,22 +36,20 @@ app.use(`${api}/cart`, cartRoutes);
 app.use(`${api}/posts`, postRoutes);
 app.use(`${api}/orders`, orderRoutes);
 
-// test api
-app.get(`${api}`, function (req, res) {
-  res.send('hello, world!');
-});
-
 // database connection
 mongoose
   .connect(process.env.CONNECTION_STRING)
-  .then(() => {
-    console.log('Database connected');
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+  .then(() => console.log('Database connected'))
+  .catch((err) => console.log(err));
+
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, 'build')));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 // test server
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
+const port = process.env.PORT || 6969;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });

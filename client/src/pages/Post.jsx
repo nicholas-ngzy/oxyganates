@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -25,11 +25,11 @@ export default function Post() {
   const [form, setForm] = useState({ content: '' });
   let { id } = useParams();
   const navigate = useNavigate();
-  const { token, user, url } = useContext(TokenContext);
+  const { token, user } = useContext(TokenContext);
 
   useEffect(() => {
     axios
-      .get(`${url}/posts/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/posts/${id}`)
       .then((res) => {
         setPost(res.data);
         setComments(res.data.comment);
@@ -44,7 +44,7 @@ export default function Post() {
 
   const handleDeletePost = () => {
     axios
-      .delete(`${url}/posts/${id}`)
+      .delete(`${process.env.REACT_APP_API_URL}/posts/${id}`)
       .then(() => navigate('/posts'))
       .catch((err) => console.log(err));
   };
@@ -54,7 +54,7 @@ export default function Post() {
     else if (form.content.trim() === '') alert('Empty comment');
     else {
       axios
-        .patch(`${url}/posts/${id}`, form)
+        .patch(`${process.env.REACT_APP_API_URL}/posts/${id}`, form)
         .then((res) => {
           alert(res.data.message);
           window.location.reload();
@@ -71,7 +71,7 @@ export default function Post() {
       }
     }
     axios
-      .put(`${url}/posts/${id}`, comments)
+      .put(`${process.env.REACT_APP_API_URL}/posts/${id}`, comments)
       .then((res) => window.location.reload())
       .catch((err) => console.log(err));
   };

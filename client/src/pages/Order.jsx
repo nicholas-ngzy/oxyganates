@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Card, CardContent, CardHeader, Chip, Container, Grid, Typography } from '@mui/material';
 import TokenContext from '../context/TokenProvider';
@@ -11,7 +11,7 @@ export default function Order() {
   useEffect(() => {
     if (user.userId === undefined) return;
     axios
-      .get(`http://localhost:6969/api/v1/orders?user=${user.userId}`)
+      .get(`${process.env.REACT_APP_API_URL}/orders?user=${user.userId}`)
       .then((res) => setOrders(res.data))
       .catch((err) => console.log(err));
   }, [user]);

@@ -11,14 +11,14 @@ export default function Catalog() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:6969/api/v1/products?categories=${value}`)
+      .get(`${process.env.REACT_APP_API_URL}/products?categories=${value}`)
       .then((res) => setProducts(res.data))
       .catch((err) => console.log(err));
   }, [value]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:6969/api/v1/categories`)
+      .get(`${process.env.REACT_APP_API_URL}/categories`)
       .then((res) => setCategories(res.data))
       .catch((err) => console.log(err));
   }, []);

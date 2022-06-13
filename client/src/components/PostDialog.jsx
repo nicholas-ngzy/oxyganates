@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
 import TokenContext from '../context/TokenProvider';
@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 export default function PostDialog({ open, handleClose, title, content, userId, postId }) {
   const [form, setForm] = useState({ title: title, content: content });
   const [errors, setErrors] = useState({});
-  const { token, url } = useContext(TokenContext);
+  const { token } = useContext(TokenContext);
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -33,12 +33,12 @@ export default function PostDialog({ open, handleClose, title, content, userId, 
       else {
         if (postId) {
           axios
-            .put(`${url}/posts/${postId}`, form)
+            .put(`${process.env.REACT_APP_API_URL}/posts/${postId}`, form)
             .then((res) => window.location.reload())
             .catch((err) => console.log(err));
         } else {
           axios
-            .post(`${url}/posts`, form)
+            .post(`${process.env.REACT_APP_API_URL}/posts`, form)
             .then((res) => window.location.reload())
             .catch((err) => console.log(err));
         }

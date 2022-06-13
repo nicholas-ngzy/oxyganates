@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import TokenContext from '../context/TokenProvider';
@@ -15,7 +15,7 @@ export default function Forum() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:6969/api/v1/posts`)
+      .get(`${process.env.REACT_APP_API_URL}/posts`)
       .then((res) => setPosts(res.data))
       .catch((err) => console.log(err));
   }, []);

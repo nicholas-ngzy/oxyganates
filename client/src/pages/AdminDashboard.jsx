@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Grid, Typography, Table, TableContainer, TableHead, TableRow, TableCell } from '@mui/material';
 import NotFound from './NotFound';
@@ -77,15 +77,15 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:6969/api/v1/orders/sales`)
+      .get(`${process.env.REACT_APP_API_URL}/orders/sales`)
       .then((res) => setEarningsData(res.data))
       .catch((err) => console.log(err));
     axios
-      .get(`http://localhost:6969/api/v1/orders/status`)
+      .get(`${process.env.REACT_APP_API_URL}/orders/status`)
       .then((res) => setStatusData(res.data))
       .catch((err) => console.log(err));
     axios
-      .get(`http://localhost:6969/api/v1/products/count`)
+      .get(`${process.env.REACT_APP_API_URL}/products/count`)
       .then((res) => setCountData(res.data))
       .catch((err) => console.log(err));
   }, []);

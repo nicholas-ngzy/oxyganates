@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
@@ -7,7 +7,7 @@ export default function Paypal({ cart, subtotal, user, handleClear }) {
   return (
     <PayPalScriptProvider
       options={{
-        'client-id': 'AdjpJeCU_0NVbn2r2ackLQzk3qiOhWME3CjplIhvhE8ntzZ3LClXB5O1UVE8U9NCf4JOKwxKoQt5vc7F',
+        'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
         currency: 'MYR',
         intent: 'capture',
         components: 'buttons',
@@ -18,7 +18,7 @@ export default function Paypal({ cart, subtotal, user, handleClear }) {
           for (let i = 0; i < cart.length; i++) {
             let id = cart[i].product.id;
             axios
-              .get(`http://localhost:6969/api/v1/products/${id}`)
+              .get(`${process.env.REACT_APP_API_URL}/products/${id}`)
               .then((res) => {
                 let stock = res.data.quantity;
                 let quantity = cart[i].quantity;
@@ -47,12 +47,14 @@ export default function Paypal({ cart, subtotal, user, handleClear }) {
             alert('Transaction completed');
             for (let i = 0; i < update.length; i++) {
               axios
-                .put(`http://localhost:6969/api/v1/products/${update[i].id}/count`, { quantity: update[i].quantity })
+                .put(`${process.env.REACT_APP_API_URL}/products/${update[i].id}/count`, {
+                  quantity: update[i].quantity,
+                })
                 .then((res) => res)
                 .catch((err) => console.log(err));
             }
             axios
-              .post(`http://localhost:6969/api/v1/orders`, {
+              .post(`${process.env.REACT_APP_API_URL}/orders`, {
                 user: user,
                 items: cart,
                 total: (Math.round(subtotal * 100) / 100).toFixed(2),

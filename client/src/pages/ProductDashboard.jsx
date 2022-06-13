@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import NotFound from './NotFound';
 import AddProductDialog from '../components/AddProductDialog';
@@ -54,7 +54,7 @@ export default function ProductDashboard() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:6969/api/v1/products')
+      .get(`${process.env.REACT_APP_API_URL}/products`)
       .then((res) => setProducts(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -65,14 +65,14 @@ export default function ProductDashboard() {
 
   const handleUpdate = (params) => {
     axios
-      .put(`http://localhost:6969/api/v1/products/${params.id}`, params.row, config)
+      .put(`${process.env.REACT_APP_API_URL}/products/${params.id}`, params.row, config)
       .then((res) => alert(res.data.message))
       .catch((err) => console.log(err));
   };
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:6969/api/v1/products/${id}`, config)
+      .delete(`${process.env.REACT_APP_API_URL}/products/${id}`, config)
       .then((res) => {
         alert(res.data);
         window.location.reload();
