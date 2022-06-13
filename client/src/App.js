@@ -1,3 +1,4 @@
+import React from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Pages from './pages/Pages';
 import { BrowserRouter } from 'react-router-dom';
