@@ -94,6 +94,16 @@ export default function AddProductDialog(props) {
         />
         <TextField
           required
+          label='Image'
+          name='image'
+          fullWidth
+          value={form.image}
+          onChange={handleChange}
+          error={Boolean(errors.image)}
+          helperText={errors.image || ' '}
+        />
+        <TextField
+          required
           label='Price'
           name='price'
           fullWidth
@@ -125,16 +135,6 @@ export default function AddProductDialog(props) {
           onChange={handleChange}
           error={Boolean(errors.quantity)}
           helperText={errors.quantity || ' '}
-        />
-        <TextField
-          required
-          label='Image'
-          name='image'
-          fullWidth
-          value={form.image}
-          onChange={handleChange}
-          error={Boolean(errors.image)}
-          helperText={errors.image || ' '}
         />
       </DialogContent>
       <DialogActions>

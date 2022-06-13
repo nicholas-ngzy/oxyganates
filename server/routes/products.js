@@ -2,155 +2,89 @@ import { Product } from '../models/product.js';
 import { Router } from 'express';
 import mongoose from 'mongoose';
 const router = Router();
-import multer from 'multer';
-
-const FILE_TYPE_MAP = {
-  'image/png': 'png',
-  'image/jpeg': 'jpeg',
-  'image/jpg': 'jpg',
-};
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const isValid = FILE_TYPE_MAP[file.mimetype];
-    let uploadError = new Error('invalid image type');
-    if (isValid) {
-      uploadError = null;
-    }
-    cb(uploadError, 'public/uploads');
-  },
-  filename: function (req, file, cb) {
-    const fileName = file.originalname.split(' ').join('-');
-    const extension = FILE_TYPE_MAP[file.mimetype];
-    cb(null, `${fileName}-${Date.now()}.${extension}`);
-  },
-});
-const uploadOptions = multer({ storage: storage });
-
-//create a product
-// router.post('/', uploadOptions.single('image'), (req, res) => {
-//   // const file = req.file;
-//   // if (!file) return res.status(400).send('No image in request');
-//   // const fileName = req.body.filename;
-//   // const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
-//   const product = new Product({
-//     name: req.body.name,
-//     description: req.body.description,
-//     price: req.body.price,
-//     quantity: req.body.quantity,
-//     category: req.body.category,
-//     // image: `${basePath}${fileName}`,
-//   });
-//   product
-//     .save()
-//     .then((res) => {
-//       res.status(201).send({ message: 'Product added' });
-//     })
-//     .catch((err) => {
-//       res.status(500).send(err);
-//     });
-// });
 
 //create a product
 router.post('/', (req, res) => {
   const product = new Product({
     name: req.body.name,
-    description: req.body.description,
+    description: JSON.stringify(req.body.description),
     price: req.body.price,
+    category: req.body.category.id,
     quantity: req.body.quantity,
-    category: req.body.category,
     image: req.body.image,
   });
   product
     .save()
-    .then((createdProduct) => {
-      return res.status(201).json(createdProduct);
-    })
-    .catch((err) => {
-      return res.status(500).json({ error: err, success: false });
-    });
+    .then((createdProduct) => res.status(201).send(createdProduct))
+    .catch((err) => res.status(500).send(err));
 });
 
-// get all products
+//get product list
 router.get('/', async (req, res) => {
-  let filter = {};
-  if (req.query.categories) {
-    filter = { category: req.query.categories.split(',') };
-  }
+  let filter;
+  if (req.query.categories) filter = { category: req.query.categories };
   const productList = await Product.find(filter).populate('category');
-  if (productList) {
-    return res.send({ productList });
-  } else {
-    return res.status(500).json({ success: false });
-  }
+  if (productList) res.status(200).send(productList);
+  else res.status(500).send('Error');
 });
 
 //get  number  of products
 router.get('/count', async (req, res) => {
-  const productCount = await Product.countDocuments({});
-  if (productCount) {
-    return res.send({ productCount: productCount });
-  } else {
-    return res.status(500).json({ success: false });
-  }
+  const productList = await Product.find({ quantity: { $lte: 15 } })
+    .select('name quantity')
+    .sort('quantity');
+  if (productList) res.status(200).send(productList);
+  else res.status(500).send('Error');
 });
 
 //get a product
 router.get('/:id', async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  if (product) {
-    res.status(200).send(product);
-  } else {
-    res.status(500).json({ success: false });
-  }
+  const product = await Product.findById(req.params.id).populate('category');
+  if (product) res.status(200).send(product);
+  else res.status(500).send('Error');
+});
+
+//update count
+router.put('/:id/count', async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) return res.status(400).send({ message: 'Product id is invalid' });
+  const updatedProduct = await Product.findByIdAndUpdate(
+    req.params.id,
+    { quantity: req.body.quantity },
+    { new: true }
+  ).select('id name quantity');
+  if (updatedProduct) res.status(200).send({ updatedProduct, message: 'Stock updated' });
+  else res.status(404).send('Product id not found');
 });
 
 //update product
-router.put('/:id', uploadOptions.single('image'), async (req, res) => {
-  if (!mongoose.isValidObjectId(req.params.id)) {
-    return res.status(400).send({ message: 'Product id is invalid' });
-  }
+router.put('/:id', async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) return res.status(400).send({ message: 'Product id is invalid' });
   const product = await Product.findById(req.params.id);
   if (!product) return res.status(400).send('Invalid product id');
-
-  const file = req.file;
-  let imagepath;
-
-  if (file) {
-    const fileName = file.filename;
-    const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
-    imagepath = `${basePath}${fileName}`;
-  } else {
-    imagepath = product.image;
-  }
-
-  const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
-    name: req.body.name,
-    description: req.body.description,
-    price: req.body.price,
-    category: req.body.category,
-    image: imagepath,
-  });
-  if (updatedProduct) {
-    res.status(200).json({ success: true, message: 'Product updated' });
-  } else {
-    res.status(404).json({ success: false, message: 'Product id not found' });
-  }
+  const updatedProduct = await Product.findByIdAndUpdate(
+    req.params.id,
+    {
+      name: req.body.name,
+      description: JSON.stringify(req.body.description),
+      price: req.body.price,
+      category: req.body.category.id,
+      quantity: req.body.quantity,
+      image: req.body.image,
+    },
+    { new: true }
+  );
+  if (updatedProduct) res.status(200).send({ updatedProduct, message: 'Product updated' });
+  else res.status(404).send('Product id not found');
 });
 
 // delete product
 router.delete('/:id', (req, res) => {
   Product.findByIdAndDelete(req.params.id)
     .then((product) => {
-      if (product) {
-        return res.status(200).json({ success: true, message: 'Product deleted' });
-      } else {
-        return res.status(404).json({ success: false, message: 'Product not found' });
-      }
+      if (product) res.status(200).send('Product deleted');
+      else return res.status(404).send('Product not found');
     })
-    .catch((err) => {
-      return res.json({ success: false, error: err });
-    });
+    .catch((err) => res.send(err));
 });
 
 export default router;

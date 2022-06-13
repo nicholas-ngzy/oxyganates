@@ -15,13 +15,21 @@ export default function ProductDashboard() {
   const columns = [
     { field: '_id', headerName: 'ID', flex: 1 },
     { field: 'name', headerName: 'Product name', editable: true, flex: 1 },
-    { field: 'description', headerName: 'Product description', flex: 2.5, editable: true },
+    { field: 'description', headerName: 'Product description', flex: 2.5, editable: true, hide: true },
     {
       field: 'category',
       headerName: 'Category',
       type: 'singleSelect',
-      valueOptions: ['Seeds', 'Fertilizers', 'Pumps'],
+      // valueOptions: [
+      //   { label: 'Fertilizers', value: '61c42a7ae21866d19b031297' },
+      //   { label: 'Grow media', value: '629d918b3bd012c4aee40fa2' },
+      //   { label: 'Kits', value: '61c42a91e21866d19b031298' },
+      //   { label: 'Seeds', value: '61c42a40e21866d19b031296' },
+      //   { label: 'Water Pumps', value: '629f2df21cf9b04f5b8b6484' },
+      // ],
+      // valueOptions: [{ label: category.name, value: category._id }],
       flex: 0.5,
+      // editable: true,
       valueGetter: (params) => params.value.name,
     },
     {
@@ -33,6 +41,7 @@ export default function ProductDashboard() {
       valueFormatter: (params) => Number(params.value).toFixed(2),
     },
     { field: 'quantity', headerName: 'Quantity', type: 'number', flex: 0.5, editable: true },
+    { field: 'image', headerName: 'Product image', flex: 2.5, editable: true, hide: true },
     {
       field: 'actions',
       type: 'actions',

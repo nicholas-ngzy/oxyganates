@@ -67,38 +67,6 @@ export default function Product() {
     } else navigate('/login');
   };
 
-  const Recommendation = ({ products }) => {
-    return (
-      <Grid
-        container
-        paddingY={3}
-        rowSpacing={2}
-        spacing={1}
-        direction='row'
-        justifyContent='space-evenly'
-        alignItems='stretch'
-      >
-        {products.map((product) => (
-          <Grid item key={product._id} md={3} xs={6}>
-            <Card sx={{ maxWidth: 300, borderRadius: '2rem' }}>
-              <CardActionArea onClick={() => navigate(`/products/${product._id}`)}>
-                <CardMedia component='img' height='250' image={product.image} alt={product.name} />
-                <CardContent>
-                  <Typography variant='h6' gutterBottom>
-                    {product.name}
-                  </Typography>
-                  <Typography variant='body2' color='text.secondary'>
-                    RM {product.price.toFixed(2)}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    );
-  };
-
   return (
     <Container sx={{ padding: '8rem' }}>
       <Grid container spacing={2} paddingBottom={5}>
@@ -124,15 +92,49 @@ export default function Product() {
           <Button size='large' variant='contained' onClick={handleSubmit} sx={{ margin: '.5em' }}>
             Add to cart
           </Button>
-          <Typography variant='h6' marginY={5}>
-            {item.description}
-          </Typography>
+          {item.description && (
+            <Typography variant='h6' marginY={5}>
+              <div dangerouslySetInnerHTML={{ __html: item.description.replace(/\\n/g, '<br>\n') }} />
+            </Typography>
+          )}
         </Grid>
       </Grid>
       <Typography variant='h6' marginTop={5} textAlign='center'>
         Other recommendations
       </Typography>
-      <Recommendation products={products} />
+      <Recommendation products={products} navigate={navigate} />
     </Container>
   );
 }
+
+const Recommendation = ({ products, navigate }) => {
+  return (
+    <Grid
+      container
+      paddingY={3}
+      rowSpacing={2}
+      spacing={1}
+      direction='row'
+      justifyContent='space-evenly'
+      alignItems='stretch'
+    >
+      {products.map((product) => (
+        <Grid item key={product._id} md={3} xs={6}>
+          <Card sx={{ maxWidth: 300, borderRadius: '2rem' }}>
+            <CardActionArea onClick={() => navigate(`/products/${product._id}`)}>
+              <CardMedia component='img' height='250' image={product.image} alt={product.name} />
+              <CardContent>
+                <Typography variant='h6' gutterBottom>
+                  {product.name}
+                </Typography>
+                <Typography variant='body2' color='text.secondary'>
+                  RM {product.price.toFixed(2)}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
+  );
+};
