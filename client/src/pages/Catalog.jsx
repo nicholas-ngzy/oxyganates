@@ -1,24 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Container, Typography, Card, CardActionArea, CardContent, CardMedia, Grid, Tabs, Tab } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import TokenContext from '../context/TokenProvider';
 
 export default function Catalog() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [value, setValue] = useState('');
   const navigate = useNavigate();
+  const {url} = useContext(TokenContext)
 
   useEffect(() => {
     axios
-      .get(`http://localhost:6969/api/v1/products?categories=${value}`)
+      .get(`${url}/products?categories=${value}`)
       .then((res) => setProducts(res.data))
       .catch((err) => console.log(err));
   }, [value]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:6969/api/v1/categories`)
+      .get(`${url}/categories`)
       .then((res) => setCategories(res.data))
       .catch((err) => console.log(err));
   }, []);

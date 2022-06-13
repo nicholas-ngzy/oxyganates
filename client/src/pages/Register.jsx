@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Container, TextField, Typography } from '@mui/material';
+import TokenContext from '../context/TokenProvider';
 
 export default function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password1: '', name: '', password2: '' });
   const [errors, setErrors] = useState({});
+  const { url } = useContext(TokenContext);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -46,7 +48,7 @@ export default function Register() {
 
   const register = () => {
     axios
-      .post('http://localhost:6969/api/v1/register', form)
+      .post(`${url}/register`, form)
       .then((res) => {
         alert(res.data.message);
         navigate('/login');
