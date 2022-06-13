@@ -36,7 +36,7 @@ export default function AddProductDialog(props) {
     if (Object.keys(newErrors).length > 0) setErrors(newErrors);
     else {
       axios
-        .post(`http://localhost:6969/api/v1/products`, form, config)
+        .post(`${process.env.REACT_APP_API_URL}/products`, form, config)
         .then((res) => window.location.reload())
         .catch((err) => console.log(err));
     }
@@ -44,7 +44,7 @@ export default function AddProductDialog(props) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:6969/api/v1/categories`)
+      .get(`${process.env.REACT_APP_API_URL}/categories`)
       .then((res) => setCategories(res.data))
       .catch((err) => console.log(err));
   }, []);

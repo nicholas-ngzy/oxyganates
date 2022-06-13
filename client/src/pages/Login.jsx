@@ -40,7 +40,7 @@ export default function Login() {
 
   const login = () => {
     axios
-      .post('http://localhost:6969/api/v1/login', form)
+      .post(`${process.env.REACT_APP_API_URL}/login`, form)
       .then((res) => {
         setUser(jwtDecode(res.data.token));
         setToken(res.data.token);

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 export default function PostDialog({ open, handleClose, postId, comment, comments }) {
   const [form, setForm] = useState({ content: comment.content });
   const [errors, setErrors] = useState({});
-  const { token, url } = useContext(TokenContext);
+  const { token } = useContext(TokenContext);
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -37,7 +37,7 @@ export default function PostDialog({ open, handleClose, postId, comment, comment
           }
         }
         axios
-          .put(`${url}/posts/${postId}`, comments)
+          .put(`${process.env.REACT_APP_API_URL}/posts/${postId}`, comments)
           .then((res) => window.location.reload())
           .catch((err) => console.log(err));
       } catch (err) {

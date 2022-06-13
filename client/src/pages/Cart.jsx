@@ -13,14 +13,14 @@ export default function Cart() {
   useEffect(() => {
     if (user.userId === undefined) return;
     axios
-      .get(`http://localhost:6969/api/v1/cart?user=${user.userId}`)
+      .get(`${process.env.REACT_APP_API_URL}/cart?user=${user.userId}`)
       .then((res) => setCart(res.data.cart))
       .catch((err) => console.log(err));
   }, [user]);
 
   const handleClear = () => {
     axios
-      .put(`http://localhost:6969/api/v1/cart?user=${user.userId}`, [])
+      .put(`${process.env.REACT_APP_API_URL}/cart?user=${user.userId}`, [])
       .then((res) => setCart([]))
       .catch((err) => console.log(err));
   };

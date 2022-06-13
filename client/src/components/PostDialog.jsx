@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 export default function PostDialog({ open, handleClose, title, content, userId, postId }) {
   const [form, setForm] = useState({ title: title, content: content });
   const [errors, setErrors] = useState({});
-  const { token, url } = useContext(TokenContext);
+  const { token } = useContext(TokenContext);
   const navigate = useNavigate();
 
   const handleChange = (event) => {

@@ -97,21 +97,21 @@ export default function OrderDashboard() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:6969/api/v1/orders')
+      .get(`${process.env.REACT_APP_API_URL}/orders`)
       .then((res) => setOrders(res.data))
       .catch((err) => console.log(err));
   }, []);
 
   const handleUpdate = (params) => {
     axios
-      .patch(`http://localhost:6969/api/v1/orders/${params.id}`, { status: params.value }, config)
+      .patch(`${process.env.REACT_APP_API_URL}/orders/${params.id}`, { status: params.value }, config)
       .then((res) => alert(res.data))
       .catch((err) => console.log(err));
   };
 
   // const handleDelete = (id) => {
   //   axios
-  //     .delete(`http://localhost:6969/api/v1/orders/${id}`, config)
+  //     .delete(`${process.env.REACT_APP_API_URL}/orders/${id}`, config)
   //     .then((res) => {
   //       alert(res.data.message);
   //       window.location.reload();
