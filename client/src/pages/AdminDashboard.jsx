@@ -73,19 +73,19 @@ export default function AdminDashboard() {
   const [earningsData, setEarningsData] = useState();
   const [statusData, setStatusData] = useState();
   const [countData, setCountData] = useState([]);
-  const { user, url } = useContext(TokenContext);
+  const { user } = useContext(TokenContext);
 
   useEffect(() => {
     axios
-      .get(`${url}/orders/sales`)
+      .get(`http://localhost:6969/api/v1/orders/sales`)
       .then((res) => setEarningsData(res.data))
       .catch((err) => console.log(err));
     axios
-      .get(`${url}/orders/status`)
+      .get(`http://localhost:6969/api/v1/orders/status`)
       .then((res) => setStatusData(res.data))
       .catch((err) => console.log(err));
     axios
-      .get(`${url}/products/count`)
+      .get(`http://localhost:6969/api/v1/products/count`)
       .then((res) => setCountData(res.data))
       .catch((err) => console.log(err));
   }, []);

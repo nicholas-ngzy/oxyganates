@@ -10,12 +10,12 @@ import PostDialog from '../components/PostDialog';
 export default function Forum() {
   const [posts, setPosts] = useState([]);
   const [open, setOpen] = useState(false);
-  const { token, user, url } = useContext(TokenContext);
+  const { token, user } = useContext(TokenContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get(`${url}/posts`)
+      .get(`http://localhost:6969/api/v1/posts`)
       .then((res) => setPosts(res.data))
       .catch((err) => console.log(err));
   }, []);

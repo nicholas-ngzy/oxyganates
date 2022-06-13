@@ -6,12 +6,12 @@ import NotFound from './NotFound';
 
 export default function Order() {
   const [orders, setOrders] = useState([]);
-  const { user, url } = useContext(TokenContext);
+  const { user } = useContext(TokenContext);
 
   useEffect(() => {
     if (user.userId === undefined) return;
     axios
-      .get(`${url}/orders?user=${user.userId}`)
+      .get(`http://localhost:6969/api/v1/orders?user=${user.userId}`)
       .then((res) => setOrders(res.data))
       .catch((err) => console.log(err));
   }, [user]);

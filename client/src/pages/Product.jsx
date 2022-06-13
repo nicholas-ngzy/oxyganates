@@ -21,16 +21,16 @@ export default function Product() {
   const [error, setError] = useState(null);
   const [form, setForm] = useState({ product: id, quantity: 1 });
   const navigate = useNavigate();
-  const { token, user, url } = useContext(TokenContext);
+  const { token, user } = useContext(TokenContext);
 
   useEffect(() => {
     axios
-      .get(`${url}/products/${id}`)
+      .get(`http://localhost:6969/api/v1/products/${id}`)
       .then((res) => {
         setItem(res.data);
         const category = res.data.category.id;
         axios
-          .get(`${url}/products?categories=${category}`)
+          .get(`http://localhost:6969/api/v1/products?categories=${category}`)
           .then((res) => {
             for (let i = 0; i < res.data.length; i++) {
               if (res.data[i].id === id) res.data.splice(i, 1);
@@ -60,7 +60,7 @@ export default function Product() {
       else {
         const config = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } };
         axios
-          .patch(`${url}/cart?user=${user.userId}`, form, config)
+          .patch(`http://localhost:6969/api/v1/cart?user=${user.userId}`, form, config)
           .then((res) => alert(res.data.message))
           .catch((err) => console.log(err));
       }
