@@ -17,11 +17,6 @@ app.use(express.json());
 app.use(morgan('tiny'));
 app.use(authJwt());
 app.use(errorHandler);
-const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, '../client/build')));
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-});
 
 const api = process.env.API_URL;
 // routes
@@ -46,6 +41,12 @@ mongoose
   .connect(process.env.CONNECTION_STRING)
   .then(() => console.log('Database connected'))
   .catch((err) => console.log(err));
+
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, '../client/public')));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/public', 'index.html'));
+});
 
 // test server
 const port = process.env.PORT || 6969;
