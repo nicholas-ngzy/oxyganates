@@ -33,12 +33,12 @@ export default function PostDialog({ open, handleClose, title, content, userId, 
       else {
         if (postId) {
           axios
-            .put(`${REACT_APP_API_URL}/posts/${postId}`, form)
+            .put(`${process.env.REACT_APP_API_URL}/posts/${postId}`, form)
             .then((res) => window.location.reload())
             .catch((err) => console.log(err));
         } else {
           axios
-            .post(`${REACT_APP_API_URL}/posts`, form)
+            .post(`${process.env.REACT_APP_API_URL}/posts`, form)
             .then((res) => window.location.reload())
             .catch((err) => console.log(err));
         }
