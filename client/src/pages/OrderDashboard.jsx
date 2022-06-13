@@ -9,7 +9,7 @@ import TokenContext from '../context/TokenProvider';
 
 export default function OrderDashboard() {
   const [orders, setOrders] = useState([]);
-  const { token, user } = useContext(TokenContext);
+  const { token, user, url } = useContext(TokenContext);
   const config = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } };
   const columns = [
     { field: '_id', headerName: 'Order ID', flex: 1 },
@@ -97,21 +97,21 @@ export default function OrderDashboard() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:6969/api/v1/orders')
+      .get(`${url}/orders`)
       .then((res) => setOrders(res.data))
       .catch((err) => console.log(err));
   }, []);
 
   const handleUpdate = (params) => {
     axios
-      .patch(`http://localhost:6969/api/v1/orders/${params.id}`, { status: params.value }, config)
+      .patch(`${url}/orders/${params.id}`, { status: params.value }, config)
       .then((res) => alert(res.data))
       .catch((err) => console.log(err));
   };
 
   // const handleDelete = (id) => {
   //   axios
-  //     .delete(`http://localhost:6969/api/v1/orders/${id}`, config)
+  //     .delete(`${url}/orders/${id}`, config)
   //     .then((res) => {
   //       alert(res.data.message);
   //       window.location.reload();

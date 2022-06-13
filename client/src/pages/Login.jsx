@@ -9,7 +9,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
-  const { setToken, setUser } = useContext(TokenContext);
+  const { setToken, setUser, url } = useContext(TokenContext);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -40,7 +40,7 @@ export default function Login() {
 
   const login = () => {
     axios
-      .post('http://localhost:6969/api/v1/login', form)
+      .post(`${url}/login`, form)
       .then((res) => {
         setUser(jwtDecode(res.data.token));
         setToken(res.data.token);
