@@ -1,4 +1,5 @@
-import React, { Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import NavMenu from '../components/NavMenu';
 import Login from './Login';
 import Register from './Register';
