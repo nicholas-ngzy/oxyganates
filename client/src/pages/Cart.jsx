@@ -7,20 +7,20 @@ import NotFound from './NotFound';
 
 export default function Cart() {
   const [cart, setCart] = useState([]);
-  const { user, url } = useContext(TokenContext);
+  const { user } = useContext(TokenContext);
   let subtotal = 0;
 
   useEffect(() => {
     if (user.userId === undefined) return;
     axios
-      .get(`${url}/cart?user=${user.userId}`)
+      .get(`http://localhost:6969/api/v1/cart?user=${user.userId}`)
       .then((res) => setCart(res.data.cart))
       .catch((err) => console.log(err));
   }, [user]);
 
   const handleClear = () => {
     axios
-      .put(`${url}/cart?user=${user.userId}`, [])
+      .put(`http://localhost:6969/api/v1/cart?user=${user.userId}`, [])
       .then((res) => setCart([]))
       .catch((err) => console.log(err));
   };

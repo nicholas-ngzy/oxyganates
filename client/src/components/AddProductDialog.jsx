@@ -7,7 +7,7 @@ export default function AddProductDialog(props) {
   const [form, setForm] = useState({ name: '', description: '', price: '', quantity: '', category: '', image: '' });
   const [categories, setCategories] = useState([]);
   const [errors, setErrors] = useState({});
-  const { token, url } = useContext(TokenContext);
+  const { token } = useContext(TokenContext);
   const config = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } };
 
   const handleChange = (event) => {
@@ -36,7 +36,7 @@ export default function AddProductDialog(props) {
     if (Object.keys(newErrors).length > 0) setErrors(newErrors);
     else {
       axios
-        .post(`${url}/products`, form, config)
+        .post(`http://localhost:6969/api/v1/products`, form, config)
         .then((res) => window.location.reload())
         .catch((err) => console.log(err));
     }
@@ -44,7 +44,7 @@ export default function AddProductDialog(props) {
 
   useEffect(() => {
     axios
-      .get(`${url}/categories`)
+      .get(`http://localhost:6969/api/v1/categories`)
       .then((res) => setCategories(res.data))
       .catch((err) => console.log(err));
   }, []);

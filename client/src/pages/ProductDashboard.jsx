@@ -10,7 +10,7 @@ import TokenContext from '../context/TokenProvider';
 
 export default function ProductDashboard() {
   const [products, setProducts] = useState([]);
-  const { token, user, url } = useContext(TokenContext);
+  const { token, user } = useContext(TokenContext);
   const config = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } };
   const columns = [
     { field: '_id', headerName: 'ID', flex: 1 },
@@ -54,7 +54,7 @@ export default function ProductDashboard() {
 
   useEffect(() => {
     axios
-      .get(`${url}/products`)
+      .get('http://localhost:6969/api/v1/products')
       .then((res) => setProducts(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -65,14 +65,14 @@ export default function ProductDashboard() {
 
   const handleUpdate = (params) => {
     axios
-      .put(`${url}/products/${params.id}`, params.row, config)
+      .put(`http://localhost:6969/api/v1/products/${params.id}`, params.row, config)
       .then((res) => alert(res.data.message))
       .catch((err) => console.log(err));
   };
 
   const handleDelete = (id) => {
     axios
-      .delete(`${url}/products/${id}`, config)
+      .delete(`http://localhost:6969/api/v1/products/${id}`, config)
       .then((res) => {
         alert(res.data);
         window.location.reload();

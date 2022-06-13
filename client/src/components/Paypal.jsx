@@ -1,10 +1,8 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
-import TokenContext from '../context/TokenProvider';
 
 export default function Paypal({ cart, subtotal, user, handleClear }) {
-  const { url } = useContext(TokenContext);
   const [update, setUpdate] = useState([]);
   return (
     <PayPalScriptProvider
@@ -20,7 +18,7 @@ export default function Paypal({ cart, subtotal, user, handleClear }) {
           for (let i = 0; i < cart.length; i++) {
             let id = cart[i].product.id;
             axios
-              .get(`${url}/products/${id}`)
+              .get(`http://localhost:6969/api/v1/products/${id}`)
               .then((res) => {
                 let stock = res.data.quantity;
                 let quantity = cart[i].quantity;
@@ -49,12 +47,12 @@ export default function Paypal({ cart, subtotal, user, handleClear }) {
             alert('Transaction completed');
             for (let i = 0; i < update.length; i++) {
               axios
-                .put(`${url}/products/${update[i].id}/count`, { quantity: update[i].quantity })
+                .put(`http://localhost:6969/api/v1/products/${update[i].id}/count`, { quantity: update[i].quantity })
                 .then((res) => res)
                 .catch((err) => console.log(err));
             }
             axios
-              .post(`${url}/orders`, {
+              .post(`http://localhost:6969/api/v1/orders`, {
                 user: user,
                 items: cart,
                 total: (Math.round(subtotal * 100) / 100).toFixed(2),
