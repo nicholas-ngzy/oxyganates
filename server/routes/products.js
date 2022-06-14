@@ -9,7 +9,7 @@ router.post('/', (req, res) => {
     name: req.body.name,
     description: JSON.stringify(req.body.description),
     price: req.body.price,
-    category: req.body.category.id,
+    category: req.body.category,
     quantity: req.body.quantity,
     image: req.body.image,
   });
