@@ -1,33 +1,33 @@
 {
-  "type": "module",
-  "name": "mea",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node server.js",
-    "start:dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "server": "nodemon server.js",
-    "client": "cd ../client && npm run start",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "engines": {
-    "node": "16.x",
-    "npm": "7.21.0"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "bcrypt": "^5.0.1",
-    "concurrently": "^6.5.1",
-    "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.2",
-    "express-jwt": "^6.1.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.1.2",
-    "morgan": "^1.10.0",
-    "nodemon": "^2.0.15"
-  }
+	"type": "module",
+	"name": "oxyganates",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"start:dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+		"server": "nodemon index.js",
+		"client": "cd ../client && npm run start",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"engines": {
+		"node": "24.x",
+		"npm": "11.6.2"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^6.0.0",
+		"concurrently": "^9.2.1",
+		"cors": "^2.8.5",
+		"dotenv": "^17.2.4",
+		"express": "^5.2.1",
+		"express-jwt": "^8.5.1",
+		"jsonwebtoken": "^9.0.3",
+		"mongoose": "^9.1.6",
+		"morgan": "^1.10.0",
+		"nodemon": "^3.1.11"
+	}
 }

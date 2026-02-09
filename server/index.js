@@ -10,7 +10,6 @@ import errorHandler from './helpers/errorhandler.js';
 
 // enable cors
 app.use(cors());
-app.options('*', cors());
 
 // middleware to connect frontend and backend
 app.use(express.json());
@@ -38,18 +37,12 @@ app.use(`${api}/orders`, orderRoutes);
 
 // database connection
 mongoose
-  .connect(process.env.CONNECTION_STRING)
-  .then(() => console.log('Database connected'))
-  .catch((err) => console.log(err));
-
-const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, 'build')));
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+	.connect(process.env.CONNECTION_STRING)
+	.then(() => console.log('Database connected'))
+	.catch((err) => console.log(err));
 
 // test server
 const port = process.env.PORT || 6969;
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+	console.log(`Server is running on port ${port}`);
 });
